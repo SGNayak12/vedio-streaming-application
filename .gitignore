@@ -1,0 +1,55 @@
+# Dependencies
+node_modules/
+/frontend/node_modules/
+
+# Build outputs
+/dist
+/frontend/dist
+/build
+/frontend/build
+
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Video files
+/uploads/*
+/test-video/*
+*.mp4
+*.avi
+*.mov
+*.wmv
+*.flv
+*.mkv
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Vite
+.vite/
+*.local
+
+# Lockfiles
+package-lock.json
+yarn.lock
+# keep bun.lockb since it's being used in the frontend
+!/frontend/bun.lockb
