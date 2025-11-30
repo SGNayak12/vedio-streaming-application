@@ -1,45 +1,45 @@
-import './App.css'
-import VideoPlayer from './VideoPlayer'
-import { useRef } from 'react'
+import { useState, useCallback } from 'react';
+import Navigation from './components/Navigation';
+import HomePage from './pages/HomePage';
+import VideoPage from './pages/VideoPage';
+import UploadPage from './pages/UploadPage';
+import './styles/global.css';
+import './App.css';
 
 function App() {
-  const playerRef = useRef(null)
-  const videoLink = "http://localhost:8000/uploads/courses/104d2093-abb0-413b-8702-c3d70c8c7332/index.m3u8"
-// C:\Users\SUHAS G NAYAK\OneDrive\Desktop\vedio-streaming\uploads\courses\104d2093-abb0-413b-8702-c3d70c8c7332
-  const videoPlayerOptions = {
-    controls: true,
-    responsive: true,
-    fluid: true,
-    sources: [
-      {
-        src: videoLink,
-        type: "application/x-mpegURL"
-      }
-    ]
-  }
-  const handlePlayerReady = (player) => {
-    playerRef.current = player;
+  const [currentPage, setCurrentPage] = useState('home');
+  const [currentVideo, setCurrentVideo] = useState(null);
 
-    // You can handle player events here, for example:
-    player.on("waiting", () => {
-      videojs.log("player is waiting");
-    });
+  const handleNavigate = useCallback((page) => {
+    setCurrentPage(page);
+  }, []);
 
-    player.on("dispose", () => {
-      videojs.log("player will dispose");
-    });
-  };
+  const handleVideoUploaded = useCallback((videoId) => {
+    // Refresh videos on home page after upload
+    if (currentPage === 'home') {
+      window.location.reload(); // Simple refresh, could be improved
+    }
+  }, [currentPage]);
+
+  const handleVideoSelect = useCallback((videoId, video) => {
+    setCurrentVideo({ id: videoId, ...video });
+    setCurrentPage('video');
+  }, []);
+
   return (
-    <>
-      <div>
-        <h1>Video player</h1>
-      </div>
-      <VideoPlayer
-      options={videoPlayerOptions}
-      onReady={handlePlayerReady}
-      />
-    </>
-  )
+    <div className="app">
+      <Navigation currentPage={currentPage} onNavigate={handleNavigate} />
+      {currentPage === 'home' && (
+        <HomePage onVideoSelect={handleVideoSelect} />
+      )}
+      {currentPage === 'upload' && (
+        <UploadPage onVideoUploaded={handleVideoUploaded} />
+      )}
+      {currentPage === 'video' && (
+        <VideoPage video={currentVideo} />
+      )}
+    </div>
+  );
 }
 
-export default App
+export default App;
